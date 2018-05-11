@@ -29,7 +29,7 @@ print(f.flush())#实时刷新写到硬盘上
 #print(f.truncate())#从头阶段字符
 
 '''
-for i in range(20):#打印进度条
+for i in range(20):
     sys.stdout.write('#')
     sys.stdout.flush()
     time.sleep(0.5)
