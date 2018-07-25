@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="i">陈朔长得最帅</div>
+<script>
+    function f1() {
+        var tag1 = document.getElementById('i');
+        var connent = tag1.innerText;
+
+        var f = connent.charAt(0);
+        var l = connent.substring(1, connent.length);
+
+        var g;
+        g = f + l;
+        tag1.innerText = g;
+    }
+    setInterval('f1()', 1);
+</script>
+</body>
+</html>
