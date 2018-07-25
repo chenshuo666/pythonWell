@@ -1,0 +1,7 @@
+.header-center{
+    width:1000px;
+    margin: 0 auto;
+}
+.header-center:hover{
+    background-color: rgba(10, 145, 148, 0);
+}

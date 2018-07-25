@@ -1,12 +1,13 @@
 from django.db import models
 
+
 # Create your models here.
 
 class UserType(models.Model):
     name = models.CharField(max_length=32)
 
-class UserInfo(models.Model):
 
+class UserInfo(models.Model):
     username = models.CharField(max_length=30)
     pwd = models.CharField(max_length=32)
     email = models.CharField(max_length=32)
@@ -14,9 +15,8 @@ class UserInfo(models.Model):
 
 
 class UsernameInfo(models.Model):
-
     username = models.CharField(max_length=30)
     pwd = models.CharField(max_length=32)
     email = models.CharField(max_length=32)
-    gender= models.CharField(max_length=32)
+    gender = models.CharField(max_length=32)
     phone = models.CharField(max_length=32)

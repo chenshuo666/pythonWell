@@ -1,10 +1,10 @@
 #!/usr/bin/python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 # Author:Sebastian Williams
 
 from django.conf.urls import url, include
 from django.contrib import admin
-from .views import getAbout,getBlog,getContact,getHome,getLogin,getLogin_blog,getPortfolio,getRegister
+from .views import getAbout, getBlog, getContact, getHome, getLogin, getLogin_blog, getPortfolio, getRegister
 
 urlpatterns = [
     url(r'^login', getLogin),

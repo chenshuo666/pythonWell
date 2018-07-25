@@ -20,17 +20,7 @@ from cmdb import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^h.html/', views.home),
-    url(r'^index/',include("cmdb.urls")),
-    #url(r'^article/',include("blogcontext.urls")),
-
-
-    # url(r'^login', views.getLogin),
-    # url(r'^home', views.getHome),
-    # url(r'^index',views.getIndex),
-    # url(r'^about',views.getAbout),
-    # url(r'^blog',views.getBlog),
-    # url(r'^contact',views.getContact),
-    # url(r'^login_blog',views.getLogin_blog),
-    # url(r'^portfolio',views.getPortfolio),
-    # url(r'^register',views.getRegister)
+    url(r'^cmdb/', include("cmdb.urls")),
+    # url(r'^article/',include("blogcontext.urls")),
+    url(r'^backstage/', include("backstage.urls")),
 ]

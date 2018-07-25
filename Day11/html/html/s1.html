@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--meta http-equiv="refresh" content="3"--> <!--页面3秒刷新一次,跳转到指定的网站-->
+    <meta name="keywords" content="博客,陈朔">
+    <meta name="description" content="这是陈朔的个人技术博客网站">
+
+    <link rel="stylesheet" href="../css/commmons.css"/>
+    <style type="text/css">
+        body {
+            background-image:url('../img/1.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+    <title>williams'blog</title>
+</head>
+
+<body >
+
+
+
+    <a href="http://www.baidu.com" target="_blank">百度链接</a>
+
+    <form action="http://localhost:8888/index" method="get">
+        <input type="text" name="user" title="用户名"/>
+        <input type="text" name="email" title="邮箱地址"/>
+        <input type="password" name="pwd" title="密码"/>
+        <input type="button" value="登录1"/>
+        <input type="submit" value="登录2"/>
+    </form>
+    <form action="http://localhost:8888/index" method="get">
+        <div >
+            <p>上传文件：</p>
+            上传：<input type="file">
+            <br/>
+            <textarea name="tijiao" title=""> chenshuo </textarea>
+            <P>单选按钮：
+                <select name="selectlist"  multiple="multiple" title="">
+                    <option value="1">选项1</option>
+                    <option value="2">选项2</option>
+                    <option value="3">选项3</option>
+                </select>
+            </P>
+
+        </div>
+    </form>
+    <br/>
+    <a href="#i1">第一章</a>
+    <a href="#i2">第二章</a>
+    <a href="#i3">第三章</a>
+
+    <div class="c1" id="i1" style="height: 600px">第一章的内容</div>
+    <div class="c1" id="i2" style="height: 600px">第二章的内容</div>
+    <div class="c1" id="i3" style="height: 1200px">第三章的内容</div>
+
+</body>
+</html>

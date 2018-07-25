@@ -1,3 +1,4 @@
+{%load static %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -28,26 +29,26 @@
     <meta name="twitter:card" content=""/>
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="shortcut icon" href="../static/assets/ico/favicon.png">
+    <link rel="shortcut icon" href="{% static 'assets/ico/favicon.png'%}">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
     <!-- Animate.css -->
-    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <!-- Icomoon Icon Fonts-->
-    <link rel="stylesheet" href="../static/css/icomoon.css">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css'%}">
     <!-- Bootstrap  -->
-    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <!-- Flexslider  -->
-    <link rel="stylesheet" href="../static/css/flexslider.css">
+    <link rel="stylesheet" href="{% static 'css/flexslider.css' %}">
     <!-- Theme style  -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style_home.css' %}">
 
     <!-- Modernizr JS -->
-    <script src="../static/js/modernizr-2.6.2.min.js"></script>
+    <script src="{% static 'js/modernizr-2.6.2.min.js' %}"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-    <script src="../static/js/respond.min.js"></script>
+    <script src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
 
 </head>
@@ -65,6 +66,7 @@
                 <li class="fh5co-active"><a href="about.html">关于</a></li>
                 <li><a href="contact.html">联系我</a></li>
                 <li><a href="login.html">登录</a></li>
+                <li><a href="/backstage/index">后台管理</a></li>
                 <li>{{current_user}}</li>
             </ul>
         </nav>
@@ -85,7 +87,8 @@
         <div class="fh5co-narrow-content">
             <div class="row row-bottom-padded-md">
                 <div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
-                    <img class="img-responsive" src="../static/images/img_bg_1.jpg" alt="Free HTML5 Bootstrap Template by FreeHTML5.co">
+                    <img class="img-responsive" src="../static/images/img_bg_1.jpg"
+                         alt="Free HTML5 Bootstrap Template by FreeHTML5.co">
                 </div>
                 <div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
                     <h2 class="fh5co-heading">About Company</h2>

@@ -1,3 +1,4 @@
+{%load static%}
 <!DOCTYPE html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -13,8 +14,7 @@
     <title>Sebastian Williams'Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Website Template by FreeHTML5.co"/>
-    <meta name="keywords"
-          content="free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive"/>
+    <meta name="keywords" content="free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive"/>
 
 
     <!-- Facebook and Twitter integration -->
@@ -29,26 +29,26 @@
     <meta name="twitter:card" content=""/>
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="shortcut icon" href="../static/assets/ico/favicon.png">
+    <link rel="shortcut icon" href="{% static 'assets/ico/favicon.png'%}">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
     <!-- Animate.css -->
-    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <!-- Icomoon Icon Fonts-->
-    <link rel="stylesheet" href="../static/css/icomoon.css">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css'%}">
     <!-- Bootstrap  -->
-    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <!-- Flexslider  -->
-    <link rel="stylesheet" href="../static/css/flexslider.css">
+    <link rel="stylesheet" href="{% static 'css/flexslider.css' %}">
     <!-- Theme style  -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style_home.css' %}">
 
     <!-- Modernizr JS -->
-    <script src="../static/js/modernizr-2.6.2.min.js"></script>
+    <script src="{% static 'js/modernizr-2.6.2.min.js' %}"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-    <script src="../static/js/respond.min.js"></script>
+    <script src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
 
 </head>
@@ -60,12 +60,13 @@
         <h1 id="fh5co-logo"><a href="home.html">目录</a></h1>
         <nav id="fh5co-main-menu" role="navigation">
             <ul>
-                <li><a href="home.html">主页</a></li>
-                <li><a href="blog.html">博客</a></li>
+                <li class="fh5co-active"><a href="home.html">主页</a></li>
+                <li ><a href="blog.html">博客</a></li>
                 <li><a href="portfolio.html">文件夹</a></li>
                 <li><a href="about.html">关于</a></li>
-                <li class="fh5co-active"><a href="contact.html">联系我</a></li>
+                <li><a href="contact.html">联系我</a></li>
                 <li><a href="login.html">登录</a></li>
+                <li><a href="/backstage/index">后台管理</a></li>
                 <li>{{current_user}}</li>
             </ul>
         </nav>
