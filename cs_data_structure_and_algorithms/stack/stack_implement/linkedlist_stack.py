@@ -7,7 +7,7 @@ class Node(object):
         self.data=data    #指向元素的值,原队列第二元素
         self.next=None   #指向的指针
 
-class stack(object):
+class LinkedListStack(object):
     def __init__(self,max_capacity):
         self.top=None #初始化最开始的位置
         self.max_capacity = max_capacity
@@ -65,13 +65,34 @@ class stack(object):
             self.length -= 1
             return tmp
 
+    def travel_print(self):
+        """
+        遍历整个栈，并输出栈的值
+        """
+        if self.isEmpty():
+            print("Stack's length is 0")
+        else:
+            node = self.top
+            print("top -->", node.data, end=' ')
+            while node.next:
+                node = node.next
+                print("-->", node.data, end=' ')
+            print(" ")
+
+    def clear_linkedlist_stack(self):
+        self.top = None
+        self.length = 0
+        print("the stack is empty")
+
+
 
 
 if __name__=="__main__":
-    s=stack(4)
+    s=LinkedListStack(4)
     s.push(1)
     s.push(2)
     s.push(3)
+    s.travel_print()
     print(s.get_top())
     print(s.isStackFull())
     print(s.size())
@@ -79,3 +100,10 @@ if __name__=="__main__":
     print(s.pop)
     print(s.pop)
     print(s.pop)
+
+    s.push(11)
+    s.push(22)
+    s.push(32)
+    s.travel_print()
+    s.clear_linkedlist_stack()
+    s.travel_print()
