@@ -53,8 +53,9 @@ class SimplyArrayStack:
             print("top -->", self.items[length-1],end =' ')
             length = length - 2
             while length!=-1:
-                print("--> ", self.items[length], end =' ')
+                print("-->", self.items[length], end =' ')
                 length = length-1
+            print(" ")
 
 
 
