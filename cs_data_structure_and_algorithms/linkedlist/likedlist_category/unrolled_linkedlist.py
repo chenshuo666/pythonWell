@@ -1,260 +1,195 @@
-#!/usr/bin/python
-#-*- coding:utf-8 -*-
-# Author:Sebastian Williams
+from math import ceil #round up to an integer
 
-import math
-"""
-My implementation of an unrolled linked list
-Combines the best of arrays and linked lists
-Works by having node objects that have arrays in them of a certain max length (16 default)
-Append and delete are the basic functions. Dunder methods have been added for all the regular items as well
-"""
-class UnrolledLinkedList():
+class Node():
+    def __init__(self):
+        self.array = []
+        self.next = None
 
-    """Node class representing the different lists that make up the unrolled linked list:
-    """
-    class Node():
-        def __init__(self):
-            self.items = []
-            self.next = None
-
-        def itemsLength(self):
-            return len(self.items)
-
-        def hasNext(self):
-            return True if self.next != None else False
-
-    """ULL Constructor"""
-    def __init__(self, max_node_capacity=16):
-        if max_node_capacity <= 0:
-            raise ValueError('Node capacity cannot be less than 1')
-        self.max_node_capacity = max_node_capacity
-        self.head = self.Node()
-
-    """Add the data to the end of the list
-     If a node has reached its max capacity, you must create a new node to put the data in"""
-    def append(self, data):
-        lastNode = self.getLastNode()
-
-        #If there is space in the last node to add the item, do it:
-        if lastNode.itemsLength() < self.max_node_capacity:
-            lastNode.items.append(data)
-
-        #Otherwise, we need to do some splitting and such before we add it:
-        else:
-            newNode = self.Node()
-
-            splitIndex = math.ceil(self.max_node_capacity / 2)
-            if self.max_node_capacity == 1:
-                newNode.items = []
-                newNode.items.append(data)
-            else:
-                newNode.items = lastNode.items[splitIndex:]
-                lastNode.items = lastNode.items[: splitIndex]
-                newNode.items.append(data)
-
-            lastNode.next = newNode
-            lastNode = newNode
-
-
-    def getLastNode(self):
-        thisNode = self.head
-        while thisNode.next != None:
-            thisNode = thisNode.next
-        return thisNode
-
-    """Deletes all the empty nodes (except for the first one - if that's empy then you're in trouble"""
-    def removeEmptyNodes(self):
-        thisNode = self.head
-        checking = True
-        while checking:
-            if thisNode.next != None and thisNode.next.itemsLength() == 0:
-                thisNode.next =  thisNode.next.next
-            thisNode = thisNode.next
-            if thisNode == None:
-                checking = False
-
-
-
-    """Remove the item at the given index.
-    If the index is negative, then you should remove starting from the back (i.e. deleting at -2 would delete the second-to-last element)
-    If the index is too large, raise an IndexError
-    """
-    def __delitem__(self, index):
-
-        #Reverse it for negative numbers
-        if index < 0:
-            index = self.__len__() + index
-
-        if self.__len__() <= index:
-            raise IndexError("Index range out of bounds")
-
-
-        count = 0
-        thisNode = self.head
-        checking = True
-        while checking:
-            #The index is in this node:
-            if count + thisNode.itemsLength() > index and count <= index:
-                del thisNode.items[index - count]
-                checking = False
-                #do some rebalancing:
-                self.balance(thisNode)
-
-            count += thisNode.itemsLength()
-
-            #thisNode = thisNode.next
-            if thisNode.next != None and thisNode.next.itemsLength == 0:
-                thisNode = thisNode.next.next
-            else:
-                thisNode = thisNode.next
-            if thisNode == None:
-                checking = False
-
-        self.removeEmptyNodes()
-
-    """Balances this node and everything to the right of it:"""
-    def balance(self, node):
-
-        thisNode = node
-        while thisNode.itemsLength() <= self.max_node_capacity / 2 and thisNode.hasNext():
-            self.__str__()
-            thisNode.items.append(thisNode.next.items[0])
-            thisNode.next.items = thisNode.next.items[1:]
-            self.removeEmptyNodes()
-        if thisNode.hasNext() and thisNode.next.itemsLength() < self.max_node_capacity / 2 :
-            self.balance(thisNode.next)
-
-    """Returns the item in the given index.
-    If the index is negative, return with the index starting from the back (i.e. getting at -1 returns the last item)
-    If the index is too large, raise an IndexError
-    """
-    def __getitem__(self, index):
-        thisNode = self.head
-
-        #Reverse it for negative numbers
-        if index < 0:
-            index = self.__len__() + index
-        if index >= self.__len__() or index < 0:
-            raise IndexError
-
-        count = 0
-        checking = True
-        while checking:
-            #The index is in this node:
-            if count + thisNode.itemsLength() > index and count <= index:
-                checking = False
-                return thisNode.items[index - count]
-            count += thisNode.itemsLength()
-            thisNode = thisNode.next
-
-
-    """sets the item at key to value
-    If the key is too large, raise an IndexError
-    """
-    def __setitem__(self, key, value):
-
-        #Reverse it for negative numbers
-        if key < 0:
-            key = self.__len__() + key
-
-        if key >= self.__len__():
-            raise IndexError
-
-        thisNode = self.head
-        self.__str__()
-        print(key)
-        print(value)
-        count = 0
-        checking = True
-        while checking:
-            #The index is in this node:
-            if count + thisNode.itemsLength() > key and count <= key:
-                checking = False
-                thisNode.items[key - count] = value
-
-            count += thisNode.itemsLength()
-            if thisNode.next != None:
-                thisNode = thisNode.next
-
-
-
-
-    """Use the Python yield statement to make your list iterable. This will allow you to use it in a for-each loop
-    """
-    def __iter__(self):
-        thisNode = self.head
-
-        while thisNode != None:
-            for item in thisNode.items:
-                yield item
-            thisNode = thisNode.next
-
-
-    """reverse of iter
-    """
-    def __reversed__(self):
-        #Reverse the list
-        thisNode = self.head
-        thisList = []
-
-        while thisNode != None:
-            for item in thisNode.items:
-                thisList.append(item)
-            thisNode = thisNode.next
-        for i in thisList[::-1]:
-            yield i
-
-
-
-    """Create a string representation of the list in the form {[x, x, x], [x, x], [x, x, x, x]} where each set of [] indicates the list of values within a single node.
-        returns the string as well for testing purposes
-    """
-    def __str__(self):
-        thisNode = self.head
-        toPrint = "{"
-        if thisNode.itemsLength() != 0:
-            toPrint += str(thisNode.items)
-
-
-        while thisNode.next != None:
-            thisNode = thisNode.next
-            toPrint += ", " + str(thisNode.items)
-
-        toPrint += "}"
-        print(toPrint)
-        return toPrint
-
-    """returns the total # of data in the list, not the number of nodes
-    """
     def __len__(self):
+        return len(self.array)
 
-        counting = True
-        count = 0
-        thisNode = self.head
-        while counting:
-            if thisNode.itemsLength() == 0:
-                counting = False
-            else:
-                count += thisNode.itemsLength()
-                if not thisNode.hasNext():
-                    counting = False
+
+class UnrolledLinkedList(object):
+    """This class is used to implement an Unrolled Linked List"""
+    def __init__(self, max_node_capacity=16):
+        self.max_node_capacity = max_node_capacity
+        self.length = 0
+        self._head = None
+
+    def is_empty(self):
+        if self._head ==None:
+            return True
+        else:
+            return False
+
+    def get_length(self):
+        """Get number of elements in Unrolled Linked List"""
+        return self.length
+
+    def check_index(self, index):
+        """This function checks if the index is in range. """
+        if 0 <= index < self.length:
+            # index is positive
+            return index
+        elif 0 > index >= -self.length:
+            # index is negative
+            return self.length + index
+        else:
+            raise IndexError('Index is out of range')
+
+    def balance(self, prev, cur):
+        """Balances nodes after deleting an element"""
+
+        while cur is not None:
+            next_node = cur.next
+            if next_node is None and len(cur) == 0:
+                if self.length == 0:
+                    self._head = None
                 else:
-                    thisNode = thisNode.next
-        return count
+                    prev.next = None
+            elif next_node is not None and len(cur) < self.max_node_capacity/2:
+                while len(cur) <= self.max_node_capacity/2:
+                    cur.array.append(next_node.array.pop(0))
+                    if len(next_node) == 0:
+                        next_node = next_node.next
+                        cur.next = next_node
+                if len(next_node) >= self.max_node_capacity/2:
+                     break
+            cur = next_node
+
+    def get_data_by_index(self, index):
+        """Get item from array. Works with positive and negative values
+        """
+        index = self.check_index(index)
+        node = self._head
+        while node is not None:
+            if index < len(node):
+                return node.array[index]
+            else:
+                index -= len(node)
+                node = node.next
+
+    def get_data_by_self(self, obj):
+        """Returns True if element is found in list, otherwise it returns false"""
+        if self._head is None:
+            return False
+        else:
+            contains_object = False
+            node = self._head
+            while node is not None:
+                if obj in node.array:
+                    contains_object = True
+                node = node.next
+            return contains_object
+
+    def travel_print(self):
+        """Prints string representation of Unrolled Linked List"""
+        node = self._head
+        string = '{'
+        while node is not None:
+            node_array = node.array
+            string += '['
+            for index, element in enumerate(node_array):
+                string += str(element) + '' if index == len(node_array) - 1 else str(element) + ', '
+            string += ']'
+            node = node.next
+            string += '' if node is None else ', '
+        string += '}'
+        return string
+
+    def update(self, key, value):
+        """Set item at index to a certain value
+        """
+        index = self.check_index(key)
+        node = self._head
+        while node is not None:
+            if index < len(node):
+                node.array[index] = value
+                break
+            else:
+                index -= len(node)
+                node = node.next
+
+    def insert_append(self, data):
+        """Adds data to end of Unrolled Linked List"""
+        if self._head is None:
+            node = Node()
+            node.array.append(data)
+            node.next = None
+            self._head = node
+        else:
+            node = self._head
+            while node.next is not None:
+                node = node.next
+            if len(node) < self.max_node_capacity:
+                node.array.append(data)
+            else:
+                new_node = Node()
+                new_node.array = node.array[int(ceil(len(node)/2)):]
+                new_node.array.append(data)
+                node.array = node.array[:int(ceil(len(node)/2))]
+                node.next = new_node
+
+        self.length += 1
 
 
+    def delete_by_index(self, index):
+        """Delete item from list"""
+        index = self.check_index(index)
+        prev = None
+        node = self._head
+        while node is not None:
+            if index < len(node):
+                del node.array[index]
+                self.length -= 1
+                self.balance(prev,node)
+                break
+            else:
+                index -= len(node)
+                prev = node
+                node = node.next
 
-    """Returns True if obj is in the data structure, otherwise False
-    """
-    def __contains__(self, obj):
-        thisNode = self.head
+    def __iter__(self):
+        """Returns iterator for Unrolled Linked List"""
+        node = self._head
+        iter_array = []
+        while node is not None:
+            iter_array += node.array
+            node = node.next
+        for element in iter_array:
+            yield element
 
-        while thisNode != None:
-            for val in thisNode.items:
-                if obj == val:
-                    return True
+    def __reversed__(self):
+        """Returns reverse iterator for Unrolled Linked List"""
+        node = self._head
+        iter_array = []
+        while node is not None:
+            iter_array += node.array
+            node = node.next
+        for element in reversed(iter_array):
+            yield element
 
-            thisNode = thisNode.next
-
-        return False
+if __name__=='__main__':
+    l = UnrolledLinkedList(8)
+    l.insert_append(0)
+    l.insert_append(1)
+    l.insert_append(2)
+    l.insert_append(3)
+    l.insert_append(4)
+    l.insert_append(5)
+    l.insert_append(6)
+    l.insert_append(7)
+    l.insert_append(8)
+    l.insert_append(9)
+    l.insert_append(10)
+    l.insert_append(11)
+    l.insert_append(12)
+    l.insert_append(13)
+    l.insert_append(14)
+    l.insert_append(15)
+    l.insert_append(16)
+    l.insert_append(17)
+    print(l.travel_print())
+    print(l.is_empty())
+    print(l.get_length())
+    print(l. __iter__())
