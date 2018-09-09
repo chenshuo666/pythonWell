@@ -180,24 +180,67 @@ class GraphMatrix:
                 BFS()
         return res
 
-    # def dfs(self):#深度优先遍历
-    #     def DFS(self, i, queue):
-    #         queue.append(i)
-    #         print(i)
-    #         visited[i] = 1
-    #         if len(queue) != 0:
-    #             w = queue.pop()
-    #             for k in range(self.vertice_num):
-    #                 if self.matrix[w][k] is 1 and visited[k] is 0:
-    #                     DFS(self, k, queue)
-    #
-    #     visited = [0] * self.vertice_num
-    #     queue = []
-    #     for i in range(self.vertice_num):
-    #         if visited[i] is 0:
-    #             DFS(self, i, queue)
+    def floyd(self, vertice, matrix):
+        length = len(matrix)
+        path = {}
+        for i in range(length):
+            path.setdefault(i, {})
+            for j in range(length):
+                if i == j:
+                    continue
+                path[i].setdefault(j, [i,j])
+                node = None
 
-    def create_undirected_matrix(self):
+                for k in range(length):
+                    if k == j:
+                        continue
+                    dis = matrix[i][k] + matrix[k][j]
+                    if matrix[i][j] > dis:
+                        matrix[i][j] = dis
+                        node = k
+                if node:
+                    path[i][j].insert(-1, node)
+        return matrix, path
+
+    def dijkstra(self, vertice_in, matrix, src):
+        # 判断图是否为空，如果为空直接退出
+        list_road  = []
+        if matrix is None:
+            return None
+        vertice = [i for i in range(len(matrix))]  # 获取图中所有节点
+        visited = []  # 表示已经路由到最短路径的节点集合
+        if src in vertice:
+            visited.append(src)
+            vertice.remove(src)
+        else:
+            return None
+        distance = {src: 0}  # 记录源节点到各个节点的距离
+        for i in vertice:
+            distance[i] = matrix[src][i]  # 初始化
+        # print(distance)
+        path = {src: {src: []}}  # 记录源节点到每个节点的路径
+        k = pre = src
+        while vertice:
+            mid_distance = float('inf')
+            for v in visited:
+                for d in vertice:
+                    new_distance = matrix[src][v] + matrix[v][d]
+                    if new_distance < mid_distance:
+                        mid_distance = new_distance
+                        matrix[src][d] = new_distance  # 进行距离更新
+                        k = d
+                        pre = v
+            distance[k] = mid_distance  # 最短路径
+            path[src][k] = [i for i in path[src][pre]]
+            path[src][k].append(k)
+            # 更新两个节点集合
+            visited.append(k)
+            vertice.remove(k)
+            print(visited, vertice)  # 输出节点的添加过程
+
+        return distance, path
+
+    def create_matrix(self):
         graph_by_anthor = GraphMatrix(self.vertice, self.matrix)
         print(graph_by_anthor)
         return graph_by_anthor
@@ -209,9 +252,9 @@ class GraphMatrix:
         for edge in graph_by_anthor.edges_array:
             G.add_edge(str(edge[0]), str(edge[1]))
 
-        print("nodes:", G.nodes())  # 输出全部的节点： [1, 2, 3]
-        print("edges:", G.edges())  # 输出全部的边：[(2, 3)]
-        print("number of edges:", G.number_of_edges())  # 输出边的数量：1
+        # print("nodes:", G.nodes())  # 输出全部的节点： [1, 2, 3]
+        # print("edges:", G.edges())  # 输出全部的边：[(2, 3)]
+        # print("number of edges:", G.number_of_edges())  # 输出边的数量：1
         nx.draw(G, with_labels=True)
         plt.savefig('fig.png', bbox_inches='tight')
         plt.show()
@@ -222,37 +265,38 @@ class GraphMatrix:
             G.add_node(str(node))
         G.add_weighted_edges_from(graph_by_anthor.edges_array)
 
-        print("nodes:", G.nodes())  # 输出全部的节点
-        print("edges:", G.edges())  # 输出全部的边
-        print("number of edges:", G.number_of_edges())  # 输出边的数量
+        # print("nodes:", G.nodes())  # 输出全部的节点
+        # print("edges:", G.edges())  # 输出全部的边
+        # print("number of edges:", G.number_of_edges())  # 输出边的数量
         nx.draw(G, with_labels=True)
         plt.savefig("directed_graph.png", bbox_inches='tight')
         plt.show()
 
 if __name__ == "__main__":
 
-    nodes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    matrix = [[0, 1, 1, 0, 0, 1, 0, 0],  # a
-              [0, 0, 1, 0, 1, 0, 0, 0],  # b
-              [0, 0, 0, 1, 0, 0, 0, 0],  # c
-              [0, 0, 0, 0, 1, 0, 0, 0],  # d
-              [0, 0, 0, 0, 0, 1, 0, 0],  # e
-              [0, 0, 1, 0, 0, 0, 1, 1],  # f
-              [0, 0, 0, 0, 0, 0, 0, 1],  # g
-              [0, 0, 0, 0, 0, 1, 1, 0]]  # h
-    matrix_in = [0 ,0,0,0,0,0,0,1,0]
+    nodes = ['0', '1', '2', '3', '4', '5']
+    matrix = [[0, 2, 1, 4, 5, 1],
+            [1, 0, 4, 2, 3, 4],
+            [2, 1, 0, 1, 2, 4],
+            [3, 5, 2, 0, 3, 3],
+            [2, 4, 3, 4, 0, 1],
+            [3, 4, 7, 3, 1, 0]]
+    # matrix_in = [0 ,0,0,0,0,0,0,1,0]
     m=GraphMatrix(nodes,matrix)
-    m.add_vertice("i",matrix_in)
-    # m.add_edge(6,4)
-    print(m.get_all_edges())
-    print(m.get_all_vertice())
-    print("__________________")
-    print(m.get_edge_num())
-    print(m.get_vertice_num())
-    print(m.dfs("c"))
-    print(m.bfs("a"))
-    # m.delete_vertice("i")
+    # m.add_vertice("i",matrix_in)
+    # # m.add_edge(6,4)
+    # print(m.get_all_edges())
+    # print(m.get_all_vertice())
+    # print("__________________")
+    # print(m.get_edge_num())
+    # print(m.get_vertice_num())
+    # print(m.dfs("c"))
+    # print(m.bfs("a"))
+    # # m.delete_vertice("i")
+    #
+    # new_graph, path= m.dijkstra(matrix,1)
+    # print(new_graph,path)
 
-    p=m.create_undirected_matrix()
-    m.draw_undirected_graph(p)
+    p=m.create_matrix()
+    m.draw_directed_graph(p)
 
